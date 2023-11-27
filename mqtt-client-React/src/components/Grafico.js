@@ -11,7 +11,7 @@ const TemperaturesChart = () => {
       const response = await axios.get('http://localhost:5000/temperaturas');
       const data = response.data;
       const formattedData = data.map(item => ({
-        fecha: item.fecha_hora, // Asegúrate de formatear la fecha como prefieras
+        fecha: item.fecha_hora,
         temperatura: item.temp,
       }));
       setChartData(formattedData);
@@ -20,7 +20,13 @@ const TemperaturesChart = () => {
       console.error('Error al obtener los datos de temperatura', error);
     }
   };
-
+  const CustomizedLabel = ({ x, y, stroke, value, index, data }) => {
+    return (
+      <text x={x} y={y-10} dy={-4} fill={stroke} fontSize={10} textAnchor="middle">
+        {`${data[index].temperatura}°C - ${data[index].fecha}`}
+      </text>
+    );
+  };
   useEffect(() => {
     fetchTemperatures();
   }, []);
@@ -38,13 +44,11 @@ const TemperaturesChart = () => {
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="name"  />
         <YAxis />
-        <Tooltip />
+        <Tooltip  />
         <Legend />
-        <Line type="monotone" dataKey="temperatura" stroke="#8884d8" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="temperatura" stroke="#8884d8" activeDot={{ r: 8 }}  />
       </LineChart>
     </ResponsiveContainer>
   );
